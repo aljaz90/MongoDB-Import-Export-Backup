@@ -1,0 +1,24 @@
+{
+  "name": "mongodb-import-export-backup",
+  "version": "1.0.0",
+  "description": "Export, import, and backup collections from a MongoDB database",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aljaz90/MongoDB-Import-Export-Backup.git"
+  },
+  "author": "Aljaz Kern",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/aljaz90/MongoDB-Import-Export-Backup/issues"
+  },
+  "homepage": "https://github.com/aljaz90/MongoDB-Import-Export-Backup#readme",
+  "dependencies": {
+    "mongodb": "^4.8.1",
+    "readline-sync": "^1.4.10"
+  }
+}
