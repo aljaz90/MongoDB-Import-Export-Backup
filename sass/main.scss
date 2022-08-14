@@ -31,6 +31,8 @@ $color-error: #E02626;
 $color-white: #fff;
 $color-white-2: #f4f4f4;
 
+$color-black: #000;
+
 $color-grey: #eee;
 $color-grey-2: #777;
 $color-grey-3: #333;
@@ -55,8 +57,78 @@ body {
     overflow: hidden;
     background-color: $color-white-2;
     display: grid;
+    grid-template-rows: [nav-start] 7rem [nav-end full-start] repeat(6, [row-start] minmax(calc(0.17 * calc(100vh - 7rem)), min-content) [row-end]) [full-end];
+    grid-template-columns: [full-start] minmax(6rem, 1fr) [center-start] repeat(8, [col-start] minmax(min-content, 14rem) [col-end]) [center-end] minmax(6rem, 1fr) [full-end];
+}
 
-    grid-template-rows: [nav-start] 7rem [nav-end full-start] repeat(4, [row-start] minmax(calc(0.25 * calc(100vh - 7rem)), min-content) [row-end]) [full-end];
-    grid-template-columns: [sidebar-start] 28rem [sidebar-end full-start] minmax(6rem, 1fr) [center-start] repeat(8, [col-start] minmax(min-content, 14rem) [col-end]) [center-end] minmax(6rem, 1fr) [full-end];
+.nav {
+    grid-row: nav-start / nav-end;
+    grid-column: 1 / -1;
+    background-color: #10aa50;
+    color: $color-white;
+    padding: 0 50rem;
+    display: flex;
+    align-items: center;
 
+    &--logo {
+        font-family: $font-heading;
+        font-size: 2.4rem;
+        user-select: none;
+    }
+}
+
+.connect, .databases, .collections, .actions {
+    background-color: $color-white;
+    margin: 1rem;
+    position: relative;
+    border-radius: 4px;
+    overflow: hidden;
+
+    &--title {
+        position: absolute;
+        top: 1rem;
+        left: 2rem;
+        font-family: $font-heading;
+        font-size: 1.8rem;
+        font-weight: 600;
+        opacity: 0.5;
+        user-select: none;
+    }
+
+    &--disabled {
+        display: block;
+        width: 100%;
+        height: 100%;
+        background-color: rgba($color-black, 0.2);
+
+        img {
+            width: 4.1rem;
+            filter: invert(100%);
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+    }
+}
+
+.connect {
+    grid-row: 2 / 4;
+    grid-column: center-start / 6;
+}
+
+.databases {
+    grid-row: 4 / 8;
+    grid-column: center-start / 6;
+}
+
+.collections {
+    grid-row: 2 / 7;
+    grid-column: 6 / center-end;
+    
+}
+
+.actions {
+    grid-row: 7 / 8;
+    grid-column: 6 / center-end;
 }
