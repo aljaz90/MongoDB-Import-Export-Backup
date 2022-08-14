@@ -18,7 +18,7 @@ app.get("/", (req, res) => {
 
 app.listen(PORT, () => {
     console.log(`Serving dashboard at: http://localhost:${PORT}`);
-    open(`http://localhost:${PORT}`);
+    // open(`http://localhost:${PORT}`);
 })
 
 

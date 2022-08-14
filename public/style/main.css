@@ -43,12 +43,43 @@ body {
   user-select: none;
 }
 
+.input_group {
+  display: flex;
+}
+
+.input {
+  border: 1px solid #eee;
+  padding: 0.5rem 1.5rem;
+  border-radius: 4px;
+  font-family: "Nunito", sans-serif;
+  font-size: 1.8rem;
+}
+.btn {
+  padding: 1rem 3rem;
+  font-size: 1.8rem;
+  background-color: #10aa50;
+  color: #fff;
+  border-radius: 4px;
+  font-weight: 500;
+  user-select: none;
+  transition: all 0.3s;
+  cursor: pointer;
+  border: 0;
+}
+.btn:hover {
+  background-color: #12c15b;
+}
+.btn:active {
+  background-color: #14d966;
+}
+
 .connect, .databases, .collections, .actions {
   background-color: #fff;
   margin: 1rem;
   position: relative;
   border-radius: 4px;
   overflow: hidden;
+  padding: 5rem 3rem 3rem 3rem;
 }
 .connect--title, .databases--title, .collections--title, .actions--title {
   position: absolute;
@@ -61,6 +92,9 @@ body {
   user-select: none;
 }
 .connect--disabled, .databases--disabled, .collections--disabled, .actions--disabled {
+  position: absolute;
+  left: 0;
+  top: 0;
   display: block;
   width: 100%;
   height: 100%;
@@ -73,11 +107,55 @@ body {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  user-select: none;
 }
 
 .connect {
   grid-row: 2/4;
   grid-column: center-start/6;
+}
+.connect--form {
+  display: flex;
+  flex-direction: column;
+}
+.connect--form--input {
+  flex-grow: 1;
+}
+.connect--form--input:not(:last-child) {
+  margin-right: 2rem;
+}
+.connect--status {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding-top: 6rem;
+  margin-top: 4rem;
+}
+.connect--status--title {
+  position: absolute;
+  top: 1rem;
+  left: -1rem;
+  font-family: "Open Sans", sans-serif;
+  font-size: 1.8rem;
+  font-weight: 600;
+  opacity: 0.5;
+  user-select: none;
+}
+.connect--status--icon {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  margin-right: 3rem;
+}
+.connect--status--icon-connected {
+  background-color: #50BC2F;
+}
+.connect--status--icon-disconnected {
+  background-color: #E02626;
+}
+.connect--status--text {
+  font-size: 1.8rem;
+  font-weight: 600;
 }
 
 .databases {
@@ -93,6 +171,13 @@ body {
 .actions {
   grid-row: 7/8;
   grid-column: 6/center-end;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+.actions--item:not(:last-child) {
+  margin-right: 2rem;
 }
 
 /*# sourceMappingURL=main.css.map */
