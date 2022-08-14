@@ -5,7 +5,14 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node app.js"
+    "start": "node app.js",
+    "dev": "npm-run-all --parallel watch:sass start-server",
+    "start-server": "nodemon app.js",
+    "watch:sass": "sass sass/main.scss public/style/main.css -w",
+    "compile:sass": "sass sass/main.scss public/style/style.comp.css",
+    "prefix:css": "postcss --use autoprefixer -b 'last 10 versions' public/style/style.comp.css -o public/style/style.prefix.css",
+    "compress:css": "sass public/style/style.prefix.css public/style/main.css --style compressed",
+    "build:css": "npm-run-all compile:sass prefix:css compress:css"
   },
   "repository": {
     "type": "git",
@@ -18,7 +25,13 @@
   },
   "homepage": "https://github.com/aljaz90/MongoDB-Import-Export-Backup#readme",
   "dependencies": {
+    "autoprefixer": "^10.4.8",
+    "ejs": "^3.1.8",
+    "express": "^4.18.1",
     "mongodb": "^4.8.1",
-    "readline-sync": "^1.4.10"
+    "open": "^8.4.0",
+    "postcss-cli": "^10.0.0",
+    "readline-sync": "^1.4.10",
+    "sass": "^1.54.4"
   }
 }

@@ -1,0 +1,62 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@200;300;400;500;600&family=Open+Sans:wght@300;400;500;600&display=swap');
+
+*,
+*::before,
+*::after {
+    padding: 0;
+    margin: 0;
+    box-sizing: inherit;
+}
+
+@mixin respond($breakpoint) {
+    @if $breakpoint == phone {
+        @media only screen and (max-width: 37.5em) { @content };    //600px
+    }
+    @if $breakpoint == tab-port {
+        @media only screen and (max-width: 56.25em) { @content };     //900px
+    }
+    @if $breakpoint == tab-land {
+        @media only screen and (max-width: 75em) { @content };    //1200px
+    }
+    @if $breakpoint == small-desktop {
+        @media only screen and (max-width: 112.5em) { @content };    //1800px
+    }
+}
+
+$color-success: #50BC2F;
+$color-info: #226AF9;
+$color-warning: #FFBF00;
+$color-error: #E02626;
+
+$color-white: #fff;
+$color-white-2: #f4f4f4;
+
+$color-grey: #eee;
+$color-grey-2: #777;
+$color-grey-3: #333;
+$color-grey-4: #171C21;
+
+$font-primary: 'Nunito', sans-serif;
+$font-heading: 'Open Sans', sans-serif;
+
+html {
+    font-size: 62.5%;
+    box-sizing: border-box;
+
+    @include respond(tab-port) { // width < 900?
+        font-size: 50%; //1 rem = 8px, 8/16 = 50%
+    }
+}
+
+body {
+    font-family: $font-primary;
+    line-height: 1.6;
+    font-weight: 300;
+    overflow: hidden;
+    background-color: $color-white-2;
+    display: grid;
+
+    grid-template-rows: [nav-start] 7rem [nav-end full-start] repeat(4, [row-start] minmax(calc(0.25 * calc(100vh - 7rem)), min-content) [row-end]) [full-end];
+    grid-template-columns: [sidebar-start] 28rem [sidebar-end full-start] minmax(6rem, 1fr) [center-start] repeat(8, [col-start] minmax(min-content, 14rem) [col-end]) [center-end] minmax(6rem, 1fr) [full-end];
+
+}
