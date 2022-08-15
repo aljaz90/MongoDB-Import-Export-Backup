@@ -161,6 +161,36 @@ body {
 .databases {
   grid-row: 4/8;
   grid-column: center-start/6;
+  padding-top: 6rem;
+}
+.databases--list {
+  display: flex;
+  flex-direction: column;
+}
+.databases--list--item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 3rem;
+  background-color: #f4f4f4;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.databases--list--item:hover, .databases--list--item-selected {
+  background-color: #e7e7e7;
+}
+.databases--list--item:not(:last-child) {
+  margin-bottom: 0.5rem;
+}
+.databases--list--item--name {
+  font-size: 1.8rem;
+  font-family: "Open Sans", sans-serif;
+  font-weight: 500;
+}
+.databases--list--item--size {
+  font-size: 1.3rem;
+  font-weight: 600;
 }
 
 .collections {

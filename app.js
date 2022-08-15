@@ -3,17 +3,56 @@ const fs = require("fs");
 const express = require("express");
 const app = express();
 const open = require("open");
+const bodyParser = require("body-parser");
 
 const DB = require("./db");
 
 const PORT = 8686;
 
+let connection = null;
 
 app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public"));
 
-app.get("/", (req, res) => {
-    res.render("index");
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.json('application/json'));
+
+app.get("/", async (_, res) => {
+    let databases = [];
+    let connected = false;
+    if (connection) {
+        connected = true;
+        databases = await connection.getDatabases();
+    }
+
+    res.render("index", { database: JSON.stringify({ connected: connected, databases: databases }) });
+});
+app.post("/connect", async (req, res) => {
+    if (connection) {
+        await connection.closeConnection();
+        connection = null;
+        res.json({
+            connected: false
+        });
+    }
+    else {
+        let newConnection = new DB(req.body.databaseUrl);
+
+        if (await newConnection.establishConnection()) {
+            connection = newConnection;
+            let databases = await connection.getDatabases();
+
+            res.json({
+                connected: true,
+                databases: databases
+            });
+        }
+        else {
+            res.json({
+                connected: false
+            });
+        }
+    }
 });
 
 app.listen(PORT, () => {

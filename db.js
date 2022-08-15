@@ -1,9 +1,13 @@
 const { MongoClient } = require("mongodb");
 
 module.exports = class DB {
-    constructor(url, databaseName) {
+    constructor(url) {
         this.url = url;
+    }
+    
+    async selectDatabase(databaseName) {
         this.databaseName = databaseName;
+        this.db = this.client.db(this.databaseName);
     }
 
     async establishConnection() {
@@ -11,11 +15,24 @@ module.exports = class DB {
             this.client = new MongoClient(this.url);
             await this.client.connect();
             console.log("Successfully connected to the database");
-            this.db = this.client.db(this.databaseName);            
+            return true;
         } 
         catch (error) {
             console.log("An error occured while trying to connect to the database");
-            console.log(error);  
+            console.log(error);
+            return false;
+        }
+    }
+
+    async getDatabases() {
+        try {
+            let { databases } = await this.client.db().admin().listDatabases();
+            return databases;
+        } 
+        catch (error) {
+            console.log("An error occured while trying to list databases");
+            console.log(error);
+            return [];
         }
     }
 

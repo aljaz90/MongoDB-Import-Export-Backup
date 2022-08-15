@@ -219,6 +219,42 @@ body {
 .databases {
     grid-row: 4 / 8;
     grid-column: center-start / 6;
+    padding-top: 6rem;
+
+    &--list {
+        display: flex;
+        flex-direction: column;
+
+        &--item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 3rem;
+            background-color: $color-white-2;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all .3s;
+
+            &:hover, &-selected {
+                background-color: darken($color-white-2, 5%);
+            }
+
+            &:not(:last-child) {
+                margin-bottom: 0.5rem;
+            }
+
+            &--name {
+                font-size: 1.8rem;
+                font-family: $font-heading;
+                font-weight: 500;
+            }
+
+            &--size {
+                font-size: 1.3rem;
+                font-weight: 600;
+            }
+        }
+    }
 }
 
 .collections {

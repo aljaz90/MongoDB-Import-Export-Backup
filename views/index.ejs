@@ -4,10 +4,10 @@
     <div class="connect--title">
         Connect to a MongoDB instance
     </div>
-    <form class="connect--form">
+    <form onsubmit="handleConnect(event)" class="connect--form">
         <div class="input_group connect--form--input_group">
-            <input type="text" placeholder="MongoDB URL" class="input connect--form--input">
-            <input type="submit" value="Connect" class="btn connect--form--input-submit">
+            <input type="text" name="url" required placeholder="MongoDB URL" id="urlInput" class="input connect--form--input">
+            <input type="submit" value="Connect" id="connectButton" class="btn connect--form--input-submit">
         </div>
     </form>    
     <div class="connect--status">
@@ -25,9 +25,11 @@
     <div class="databases--title">
         Databases
     </div>
-    <div class="databases--disabled">
-        <img draggable="false" src="/icons/lock-closed-outline.svg" alt="Lock closed">
+    <div class="databases--list">
     </div>
+    <!-- <div class="databases--disabled">
+        <img draggable="false" src="/icons/lock-closed-outline.svg" alt="Lock closed">
+    </div> -->
     
 </div>
 <div class="collections">
@@ -45,4 +47,10 @@
     </div>
 </div>
 
+<script src="/script/main.js"></script>
+<script>
+database = JSON.parse('<%-database%>');
+updateConnectionStatus();
+updateDatabaseList();
+</script>
 <%- include('partials/footer') %>
