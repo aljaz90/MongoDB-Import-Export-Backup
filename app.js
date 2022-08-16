@@ -20,13 +20,27 @@ app.use(bodyParser.json('application/json'));
 app.get("/", async (_, res) => {
     let databases = [];
     let connected = false;
+    let selectedDbName = null;
+    let collections = [];
 
     if (connection) {
         connected = true;
         databases = await connection.getDatabases();
+
+        if (connection.getSelectedDatabase()) {
+            selectedDbName = connection.getSelectedDatabase();
+
+            try {
+                collections = await connection.getCollections();
+            } 
+            catch (error) {
+                console.log("An error occured while getting collections");
+                console.log(error);
+            }
+        }
     }
 
-    res.render("index", { database: JSON.stringify({ connected: connected, databases: databases }) });
+    res.render("index", { database: JSON.stringify({ connected: connected, databases: databases, selectedDbName: selectedDbName, collections: collections }) });
 });
 
 app.post("/connect", async (req, res) => {

@@ -52,14 +52,9 @@ async function handleSelectDatabase(dbName) {
             },
             body: JSON.stringify(data),
         })).json();
-
-        if (database.selectedDbName) {
-            document.querySelector(`#${database.selectedDbName}-db-select-btn`).className = "databases--list--item";
-        }
         
         if (res.collections) {
             database.selectedDbName = dbName;
-            document.querySelector(`#${database.selectedDbName}-db-select-btn`).className = "databases--list--item databases--list--item-selected";
             database.collections = res.collections;
         }
         else {
@@ -75,6 +70,7 @@ async function handleSelectDatabase(dbName) {
     }
 
     updateCollectionList();
+    updateActionButtons();
 }
 
 function updateConnectionStatus() {
@@ -124,6 +120,18 @@ function updateDatabaseList() {
         item.appendChild(size);
 
         databasesList.appendChild(item);
+    }
+}
+
+function updateActionButtons() {  
+    let databaseBtns = document.querySelectorAll(".databases--list--item");
+    for (let btn of databaseBtns) {
+        if (btn.id === `${database.selectedDbName}-db-select-btn`) {
+            btn.className = "databases--list--item databases--list--item-selected";
+        }
+        else {
+            btn.className = "databases--list--item";
+        }
     }
 }
 
