@@ -79,7 +79,10 @@ body {
     &--logo {
         font-family: $font-heading;
         font-size: 2.4rem;
+        font-weight: 600;
         user-select: none;
+        border-left: 3px solid $color-white;
+        padding-left: 1rem;
     }
 }
 
@@ -156,6 +159,22 @@ body {
             transform: translate(-50%, -50%);
             user-select: none;
         }
+    }
+
+    &--help {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-family: $font-heading;
+        font-size: 1.6rem;
+        font-weight: 500;
+        color: $color-grey-2;
+        user-select: none;
     }
 }
 
@@ -236,7 +255,51 @@ body {
             transition: all .3s;
 
             &:hover, &-selected {
-                background-color: darken($color-white-2, 5%);
+                background-color: darken($color-white-2, 10%);
+            }
+
+            &:not(:last-child) {
+                margin-bottom: 0.5rem;
+            }
+
+            &--name {
+                font-size: 1.8rem;
+                font-family: $font-heading;
+                font-weight: 500;
+                user-select: none;
+            }
+
+            &--size {
+                font-size: 1.3rem;
+                font-weight: 600;
+                user-select: none;
+            }
+        }
+    }
+}
+
+.collections {
+    grid-row: 2 / 7;
+    grid-column: 6 / center-end;
+    overflow-y: auto;
+    max-height: 76vh;
+    padding-top: 6rem;
+    
+    &--list {
+        display: flex;
+        flex-direction: column;
+
+        &--item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 3rem;
+            border: 1px solid $color-grey;
+            border-radius: 4px;
+            transition: all .3s;
+
+            &:hover, &-selected {
+                // background-color: darken($color-white-2, 10%);
             }
 
             &:not(:last-child) {
@@ -249,17 +312,12 @@ body {
                 font-weight: 500;
             }
 
-            &--size {
+            &--documents {
                 font-size: 1.3rem;
                 font-weight: 600;
             }
         }
     }
-}
-
-.collections {
-    grid-row: 2 / 7;
-    grid-column: 6 / center-end;    
 }
 
 .actions {

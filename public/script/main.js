@@ -1,6 +1,8 @@
 let database = {
     connected: false,
-    databases: []
+    databases: [],
+    selectedDbName: null,
+    collections: []
 }
 
 async function handleConnect(e) {
@@ -29,8 +31,50 @@ async function handleConnect(e) {
         database.databases = [];
     }
 
+    database.collections = [];
+    database.selectedDbName = null;
+
     updateConnectionStatus();
     updateDatabaseList();
+    updateCollectionList();
+}
+
+async function handleSelectDatabase(dbName) {
+    try {
+        const data = {
+            dbName: dbName
+        };
+
+        let res = await (await fetch("/select", {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        })).json();
+
+        if (database.selectedDbName) {
+            document.querySelector(`#${database.selectedDbName}-db-select-btn`).className = "databases--list--item";
+        }
+        
+        if (res.collections) {
+            database.selectedDbName = dbName;
+            document.querySelector(`#${database.selectedDbName}-db-select-btn`).className = "databases--list--item databases--list--item-selected";
+            database.collections = res.collections;
+        }
+        else {
+            database.selectedDbName = null;
+            database.collections = [];    
+        }
+    } 
+    catch (error) {
+        console.error("An error occured while trying to connect to the server");
+        console.log(error);
+        database.selectedDbName = null;
+        database.collections = [];
+    }
+
+    updateCollectionList();
 }
 
 function updateConnectionStatus() {
@@ -50,13 +94,24 @@ function updateConnectionStatus() {
         document.querySelector("#connectButton").style.backgroundColor = "#10aa50";
     }
 }
+
 function updateDatabaseList() {
     let databasesList = document.querySelector(".databases--list");
+    let databasesHelper = document.querySelector(".databases--help");
     databasesList.replaceChildren();
+
+    if (database.databases.length) {
+        databasesHelper.style.display = "none";
+    }
+    else {
+        databasesHelper.style.display = "flex";
+    }
 
     for (let db of database.databases) {
         let item = document.createElement("div");
+        item.id = `${db.name}-db-select-btn`;
         item.classList.add("databases--list--item");
+        item.onclick = () => handleSelectDatabase(db.name);
         
         let name = document.createElement("div");
         name.classList.add("databases--list--item--name");
@@ -69,5 +124,35 @@ function updateDatabaseList() {
         item.appendChild(size);
 
         databasesList.appendChild(item);
+    }
+}
+
+function updateCollectionList() {
+    let collectionList = document.querySelector(".collections--list");
+    let collectionHelper = document.querySelector(".collections--help");
+    collectionList.replaceChildren();
+
+    if (database.collections.length || database.selectedDbName) {
+        collectionHelper.style.display = "none";
+    }
+    else {
+        collectionHelper.style.display = "flex";
+    }
+
+    for (let collection of database.collections) {
+        let item = document.createElement("div");
+        item.classList.add("collections--list--item");
+        
+        let name = document.createElement("div");
+        name.classList.add("collections--list--item--name");
+        name.innerText = collection.name;
+        item.appendChild(name);
+        
+        let documents = document.createElement("div");
+        documents.classList.add("collections--list--item--documents");
+        documents.innerText = `${collection.documentCount} documents`;
+        item.appendChild(documents);
+
+        collectionList.appendChild(item);
     }
 }

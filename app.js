@@ -20,6 +20,7 @@ app.use(bodyParser.json('application/json'));
 app.get("/", async (_, res) => {
     let databases = [];
     let connected = false;
+
     if (connection) {
         connected = true;
         databases = await connection.getDatabases();
@@ -27,6 +28,7 @@ app.get("/", async (_, res) => {
 
     res.render("index", { database: JSON.stringify({ connected: connected, databases: databases }) });
 });
+
 app.post("/connect", async (req, res) => {
     if (connection) {
         await connection.closeConnection();
@@ -48,10 +50,35 @@ app.post("/connect", async (req, res) => {
             });
         }
         else {
-            res.json({
+            res.status(400).json({
                 connected: false
             });
         }
+    }
+});
+
+app.post("/select", async (req, res) => {
+    if (!connection) {
+        return res.status(400).send("Connection with the MongoDB instance not established")
+    }
+
+    try {
+        let collections = null;
+
+        if (connection.getSelectedDatabase() === req.body.dbName) {
+            connection.selectDatabase(null);
+        }
+        else {
+            connection.selectDatabase(req.body.dbName);
+            collections = await connection.getCollections();
+        }
+
+        res.json({
+            collections: collections
+        });        
+    } 
+    catch (error) {
+        res.status(400).send("An error occured while trying to get collections");
     }
 });
 

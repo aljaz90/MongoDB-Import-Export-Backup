@@ -7,7 +7,12 @@ module.exports = class DB {
     
     async selectDatabase(databaseName) {
         this.databaseName = databaseName;
-        this.db = this.client.db(this.databaseName);
+        if (databaseName) {
+            this.db = this.client.db(this.databaseName);
+        }
+        else {
+            this.db = null;
+        }
     }
 
     async establishConnection() {
@@ -34,6 +39,25 @@ module.exports = class DB {
             console.log(error);
             return [];
         }
+    }
+
+    async getCollections() {
+        let collections = await this.db.collections();
+        let collectionData = [];
+
+        for (let collection of collections) {
+            let documentCount = await collection.countDocuments();
+            collectionData.push({
+                name: collection.collectionName,
+                documentCount: documentCount
+            })
+        }
+
+        return collectionData;
+    }
+
+    getSelectedDatabase() {
+        return this.databaseName;
     }
 
     import() {
