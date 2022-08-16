@@ -133,6 +133,15 @@ function updateActionButtons() {
             btn.className = "databases--list--item";
         }
     }
+
+    if (database.selectedDbName) {
+        document.querySelector("#import-btn").disabled = false;
+        document.querySelector("#export-btn").disabled = false;
+    }
+    else {
+        document.querySelector("#import-btn").disabled = true;
+        document.querySelector("#export-btn").disabled = true;
+    }
 }
 
 function updateCollectionList() {

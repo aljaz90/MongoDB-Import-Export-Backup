@@ -69,6 +69,38 @@ body {
   cursor: pointer;
   border: 0;
 }
+.btn:disabled {
+  background-color: rgba(16, 170, 80, 0.7);
+  cursor: no-drop;
+  position: relative;
+}
+.btn:disabled:hover {
+  background-color: rgba(16, 170, 80, 0.7);
+}
+.btn:disabled:active {
+  background-color: rgba(16, 170, 80, 0.7);
+}
+.btn:disabled::after {
+  content: "Select a database";
+  background-color: #333;
+  color: #fff;
+  display: block;
+  position: absolute;
+  top: -1rem;
+  left: 50%;
+  transform: translate(-50%, -100%);
+  white-space: nowrap;
+  font-family: "Nunito", sans-serif;
+  font-size: 1.6rem;
+  font-weight: 600;
+  padding: 0.5rem 1.25rem;
+  border-radius: 4px;
+  transition: all 0.3s;
+  opacity: 0;
+}
+.btn:disabled:hover::after {
+  opacity: 1;
+}
 .btn:hover {
   background-color: #12c15b;
 }
