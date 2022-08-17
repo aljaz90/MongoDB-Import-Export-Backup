@@ -212,5 +212,55 @@
 }
 
 .export_popup {
-    
+    &--form {
+        &--title {
+            font-family: $font-heading;
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 2rem;
+        }
+
+        &--collection_list {
+            display: flex;
+            flex-direction: column;
+            height: 57rem;
+            max-height: 57rem;
+            overflow-y: auto;
+            margin-bottom: 1rem;
+
+            &--item {
+                font-size: 1.8rem;
+                font-weight: 500;
+                user-select: none;
+                padding: 1.5rem 2rem;
+                display: flex;
+                align-items: center;
+                position: relative;
+
+                &:not(:last-child) {
+                    border-bottom: 1px solid $color-grey;
+                    // padding-bottom: 1rem;
+                }
+
+                label {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    cursor: pointer;
+                    padding-left: 6rem;
+
+                    display: flex;
+                    justify-content: flex-start;
+                    align-items: center;
+                }
+                
+                input {
+                    margin-right: 2rem;
+                    cursor: pointer;
+                }
+            }
+        }
+    }
 }

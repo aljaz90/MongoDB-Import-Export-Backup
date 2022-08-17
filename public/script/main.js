@@ -74,7 +74,51 @@ async function handleSelectDatabase(dbName) {
 }
 
 function handleOpenExportPopup() {
+    let popup = document.querySelector(".export_popup");
+    let popupCollectionList = document.querySelector(".export_popup--form--collection_list");
+    popupCollectionList.replaceChildren();
 
+    for (let collection of database.collections) {
+        let item = document.createElement("div");
+        item.className = "export_popup--form--collection_list--item";
+
+        let input = document.createElement("input");
+        input.type = "checkbox";
+        input.name = `${collection.name}Collection`;
+        input.id = `${collection.name}Collection`;
+        input.value = collection.name;
+        input.checked = true;
+        item.appendChild(input);
+
+        let label = document.createElement("label");
+        label.innerText = collection.name;
+        label.htmlFor = `${collection.name}Collection`;
+        item.appendChild(label);
+
+        popupCollectionList.appendChild(item);
+    }
+
+    popup.style.display = "block";
+}
+
+function handleCloseExportPopup() {
+    let popup = document.querySelector(".export_popup");
+    popup.style.display = "none";
+}
+
+async function handleExport(e) {
+    e.preventDefault();
+
+    document.querySelector(".export_popup--form--submit").disabled = true;
+    let collectionsToBeExported = [];
+
+    for (let el of e.target.elements) {
+        if (el.type === "checkbox" && el.checked) {
+            collectionsToBeExported.push(el.value);
+        }
+    }
+
+    setTimeout(() => document.querySelector(".export_popup--form--submit").disabled = false, 3000);
 }
 
 function handleOpenImportPopup() {

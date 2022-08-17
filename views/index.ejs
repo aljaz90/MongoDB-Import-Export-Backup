@@ -49,27 +49,23 @@
         Import
     </button>
 </div>
-<div class="popup--wrapper">
-    <div class="popup export_popup">
+<div class="popup--wrapper export_popup" onclick="handleCloseExportPopup()">
+    <div class="popup" onclick="event.stopPropagation()">
         <div class="popup--header">
             <div></div>
             <div class="popup--header--title">
                 Export database
             </div>
-            <img src="/icons/close-outline.svg" alt="X" class="popup--header--close" />                
+            <img src="/icons/close-outline.svg" alt="X" class="popup--header--close" onclick="handleCloseExportPopup()" />                
         </div>
         <div class="popup--body">
-            <form class="export_popup--form" action="#">
-                <div class="export_popup--form--collection_list">
-                    <div class="export_popup--form--collection_list--title">
-
-                    </div>
-                    <div class="export_popup--form--collection_list--item">
-                        <label for="usersCollection">Users</label>
-                        <input type="checkbox" name="usersCollection" id="usersCollection">
-                    </div>
+            <form onsubmit="handleExport(event)" class="export_popup--form" action="#">
+                <div class="export_popup--form--title">
+                    Select collections you want to export
                 </div>
-                <input type="submit" value="Export" class="btn">
+                <div class="export_popup--form--collection_list">
+                </div>
+                <input type="submit" value="Export" class="btn export_popup--form--submit">
             </form>
         </div>
     </div>
