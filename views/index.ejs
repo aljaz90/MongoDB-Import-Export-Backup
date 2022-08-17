@@ -49,8 +49,30 @@
         Import
     </button>
 </div>
-<div class="popup export_popup">
+<div class="popup--wrapper">
+    <div class="popup export_popup">
+        <div class="popup--header">
+            <div></div>
+            <div class="popup--header--title">
+                Export database
+            </div>
+            <img src="/icons/close-outline.svg" alt="X" class="popup--header--close" />                
+        </div>
+        <div class="popup--body">
+            <form class="export_popup--form" action="#">
+                <div class="export_popup--form--collection_list">
+                    <div class="export_popup--form--collection_list--title">
 
+                    </div>
+                    <div class="export_popup--form--collection_list--item">
+                        <label for="usersCollection">Users</label>
+                        <input type="checkbox" name="usersCollection" id="usersCollection">
+                    </div>
+                </div>
+                <input type="submit" value="Export" class="btn">
+            </form>
+        </div>
+    </div>
 </div>
 
 <script src="/script/main.js"></script>
