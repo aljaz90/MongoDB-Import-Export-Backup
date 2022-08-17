@@ -73,6 +73,14 @@ async function handleSelectDatabase(dbName) {
     updateActionButtons();
 }
 
+function handleOpenExportPopup() {
+
+}
+
+function handleOpenImportPopup() {
+
+}
+
 function updateConnectionStatus() {
     if (database.connected) {
         document.querySelector(".connect--status--text").innerText = "Connected";

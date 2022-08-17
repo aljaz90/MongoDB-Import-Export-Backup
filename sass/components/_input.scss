@@ -1,0 +1,15 @@
+.input_group {
+    display: flex;
+}
+
+.input {
+    border: 1px solid $color-grey;
+    padding: 0.5rem 1.5rem;
+    border-radius: 4px;
+    font-family: $font-primary;
+    font-size: 1.8rem;
+
+    &-submit {
+
+    }
+}

@@ -28,35 +28,6 @@ body {
   grid-template-columns: [full-start] minmax(6rem, 1fr) [center-start] repeat(8, [col-start] minmax(min-content, 14rem) [col-end]) [center-end] minmax(6rem, 1fr) [full-end];
 }
 
-.nav {
-  grid-row: nav-start/nav-end;
-  grid-column: 1/-1;
-  background-color: #10aa50;
-  color: #fff;
-  padding: 0 50rem;
-  display: flex;
-  align-items: center;
-}
-.nav--logo {
-  font-family: "Open Sans", sans-serif;
-  font-size: 2.4rem;
-  font-weight: 600;
-  user-select: none;
-  border-left: 3px solid #fff;
-  padding-left: 1rem;
-}
-
-.input_group {
-  display: flex;
-}
-
-.input {
-  border: 1px solid #eee;
-  padding: 0.5rem 1.5rem;
-  border-radius: 4px;
-  font-family: "Nunito", sans-serif;
-  font-size: 1.8rem;
-}
 .btn {
   padding: 1rem 3rem;
   font-size: 1.8rem;
@@ -106,6 +77,35 @@ body {
 }
 .btn:active {
   background-color: #14d966;
+}
+
+.input_group {
+  display: flex;
+}
+
+.input {
+  border: 1px solid #eee;
+  padding: 0.5rem 1.5rem;
+  border-radius: 4px;
+  font-family: "Nunito", sans-serif;
+  font-size: 1.8rem;
+}
+.nav {
+  grid-row: nav-start/nav-end;
+  grid-column: 1/-1;
+  background-color: #10aa50;
+  color: #fff;
+  padding: 0 50rem;
+  display: flex;
+  align-items: center;
+}
+.nav--logo {
+  font-family: "Open Sans", sans-serif;
+  font-size: 2.4rem;
+  font-weight: 600;
+  user-select: none;
+  border-left: 3px solid #fff;
+  padding-left: 1rem;
 }
 
 .connect, .databases, .collections, .actions {

@@ -1,0 +1,18 @@
+.nav {
+    grid-row: nav-start / nav-end;
+    grid-column: 1 / -1;
+    background-color: $color-primary;
+    color: $color-white;
+    padding: 0 50rem;
+    display: flex;
+    align-items: center;
+
+    &--logo {
+        font-family: $font-heading;
+        font-size: 2.4rem;
+        font-weight: 600;
+        user-select: none;
+        border-left: 3px solid $color-white;
+        padding-left: 1rem;
+    }
+}

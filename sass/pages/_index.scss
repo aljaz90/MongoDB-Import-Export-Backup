@@ -1,0 +1,212 @@
+.connect, .databases, .collections, .actions {
+    background-color: $color-white;
+    margin: 1rem;
+    position: relative;
+    border-radius: 4px;
+    overflow: hidden;
+    padding: 5rem 3rem 3rem 3rem;
+
+    &--title {
+        position: absolute;
+        top: 1rem;
+        left: 2rem;
+        font-family: $font-heading;
+        font-size: 1.8rem;
+        font-weight: 600;
+        opacity: 0.5;
+        user-select: none;
+    }
+
+    &--disabled {
+        position: absolute;
+        left: 0;
+        top: 0;
+        display: block;
+        width: 100%;
+        height: 100%;
+        background-color: rgba($color-black, 0.2);
+
+        img {
+            width: 4.1rem;
+            filter: invert(100%);
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            user-select: none;
+        }
+    }
+
+    &--help {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-family: $font-heading;
+        font-size: 1.6rem;
+        font-weight: 500;
+        color: $color-grey-2;
+        user-select: none;
+    }
+}
+
+.connect {
+    grid-row: 2 / 4;
+    grid-column: center-start / 6;
+    
+    &--form {
+        display: flex;
+        flex-direction: column;
+
+        &--input {
+            flex-grow: 1;
+
+            &:not(:last-child) {
+                margin-right: 2rem;
+            }
+        }
+    }
+
+    &--status {
+        position: relative;
+        display: flex;
+        align-items: center;
+        padding-top: 6rem;
+        margin-top: 4rem;
+
+        &--title {
+            position: absolute;
+            top: 1rem;
+            left: -1rem;
+            font-family: $font-heading;
+            font-size: 1.8rem;
+            font-weight: 600;
+            opacity: 0.5;
+            user-select: none;
+        }
+
+        &--icon {
+            width: 3rem;
+            height: 3rem;
+            border-radius: 50%;
+            margin-right: 3rem;
+
+            &-connected {
+                background-color: $color-success;
+            }
+            &-disconnected {
+                background-color: $color-error;
+            }
+        }
+
+        &--text {
+            font-size: 1.8rem;
+            font-weight: 600;
+        }
+    }
+
+}
+
+.databases {
+    grid-row: 4 / 8;
+    grid-column: center-start / 6;
+    padding-top: 6rem;
+
+    &--list {
+        display: flex;
+        flex-direction: column;
+
+        &--item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 3rem;
+            background-color: $color-white-2;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all .3s;
+
+            &:hover, &-selected {
+                background-color: darken($color-white-2, 10%);
+            }
+
+            &:not(:last-child) {
+                margin-bottom: 0.5rem;
+            }
+
+            &--name {
+                font-size: 1.8rem;
+                font-family: $font-heading;
+                font-weight: 500;
+                user-select: none;
+            }
+
+            &--size {
+                font-size: 1.3rem;
+                font-weight: 600;
+                user-select: none;
+            }
+        }
+    }
+}
+
+.collections {
+    grid-row: 2 / 7;
+    grid-column: 6 / center-end;
+    overflow-y: auto;
+    max-height: 76vh;
+    padding-top: 6rem;
+    
+    &--list {
+        display: flex;
+        flex-direction: column;
+
+        &--item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 3rem;
+            border: 1px solid $color-grey;
+            border-radius: 4px;
+            transition: all .3s;
+
+            &:hover, &-selected {
+                // background-color: darken($color-white-2, 10%);
+            }
+
+            &:not(:last-child) {
+                margin-bottom: 0.5rem;
+            }
+
+            &--name {
+                font-size: 1.8rem;
+                font-family: $font-heading;
+                font-weight: 500;
+            }
+
+            &--documents {
+                font-size: 1.3rem;
+                font-weight: 600;
+            }
+        }
+    }
+}
+
+.actions {
+    grid-row: 7 / 8;
+    grid-column: 6 / center-end;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+
+    &--item {
+        &:not(:last-child) {
+            margin-right: 2rem;
+        }
+    }
+}
