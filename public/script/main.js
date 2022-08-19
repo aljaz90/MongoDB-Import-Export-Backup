@@ -35,6 +35,7 @@ async function handleConnect(e) {
     database.selectedDbName = null;
 
     updateConnectionStatus();
+    updateActionButtons();
     updateDatabaseList();
     updateCollectionList();
 }
@@ -73,6 +74,7 @@ async function handleSelectDatabase(dbName) {
     updateActionButtons();
 }
 
+// Export (popup) functions
 function handleOpenExportPopup() {
     let popup = document.querySelector(".export_popup");
     let popupCollectionList = document.querySelector(".export_popup--form--collection_list");
@@ -147,10 +149,51 @@ async function handleExport(e) {
     document.querySelector(".export_popup--form--submit").disabled = false;
 }
 
+// Import (popup) functions
 function handleOpenImportPopup() {
+    let popup = document.querySelector(".import_popup");
+    popup.style.display = "block";
+}
+
+function handleCloseImportPopup() {
+    let popup = document.querySelector(".import_popup");
+    popup.style.display = "none";
+}
+
+function handleSelectFile(e) {
+    let fileName = e.target.value.split("\\")[2];
+    let label = document.querySelector(".import_popup--form--file--label");
+    label.style.fontSize = "2.1rem"
+    if (fileName.length > 45) {
+        label.innerText = fileName.slice(0, 45) + "...";
+    }
+    else {
+        label.innerText = fileName;
+    }
+}
+
+async function handleImport(e) {
+    e.preventDefault();
+    let input = document.querySelector("#importFile");
+    let overwriteDatabaseInput = document.querySelector("#overwriteCollections");
+
+    try {
+        let data = new FormData();
+        data.append("file", input.files[0]);
+        data.append("overwriteDatabase", overwriteDatabaseInput.checked);
+
+        let res = await fetch("/import", {
+            method: "POST",
+            body: data
+        }); 
+    } 
+    catch (error) {
+        
+    }
 
 }
 
+// Update functions
 function updateConnectionStatus() {
     if (database.connected) {
         document.querySelector(".connect--status--text").innerText = "Connected";
@@ -212,12 +255,17 @@ function updateActionButtons() {
         }
     }
 
-    if (database.selectedDbName) {
+    if (database.connected) {
         document.querySelector("#import-btn").disabled = false;
-        document.querySelector("#export-btn").disabled = false;
     }
     else {
         document.querySelector("#import-btn").disabled = true;
+    }
+    
+    if (database.selectedDbName) {
+        document.querySelector("#export-btn").disabled = false;
+    }
+    else {
         document.querySelector("#export-btn").disabled = true;
     }
 }

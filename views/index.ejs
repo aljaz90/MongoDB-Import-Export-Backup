@@ -45,7 +45,7 @@
     <button onclick="handleOpenExportPopup()" id="export-btn" class="btn actions--item actions--item-export">
         Export
     </button>
-    <button id="import-btn" class="btn actions--item actions--item-import">
+    <button onclick="handleOpenImportPopup()" id="import-btn" class="btn actions--item actions--item-import">
         Import
     </button>
 </div>
@@ -72,7 +72,37 @@
         </div>
     </div>
 </div>
-
+<div class="popup--wrapper import_popup" onclick="handleCloseImportPopup()">
+    <div class="popup" onclick="event.stopPropagation()">
+        <div class="popup--header">
+            <div></div>
+            <div class="popup--header--title">
+                Import database
+            </div>
+            <img src="/icons/close-outline.svg" alt="X" class="popup--header--close" onclick="handleCloseImportPopup()" />                
+        </div>
+        <div class="popup--body">
+            <form onsubmit="handleImport(event)" class="import_popup--form" action="#">
+                <div class="import_popup--form--title">
+                    Select a file you want to import from
+                </div>
+                <div class="input_group import_popup--form--file">
+                    <label class="import_popup--form--file--label" for="importFile">Select file</label>
+                    <input onchange="handleSelectFile(event)" type="file" name="importFile" id="importFile" class="import_popup--form--file--input" accept="application/JSON" />
+                </div>
+                <div class="input_group import_popup--form--overwrite">
+                    <label class="import_popup--form--overwrite--label" for="overwriteCollections">Overwrite database</label>
+                    <input type="checkbox" name="overwriteCollections" id="overwriteCollections" class="import_popup--form--overwrite--input" />
+                </div>
+                <div class="import_popup--form--submit--wrapper">
+                    <button type="submit" class="btn import_popup--form--submit">
+                        Import
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 <script src="/script/main.js"></script>
 <script>
 database = JSON.parse('<%-database%>');

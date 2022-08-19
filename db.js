@@ -61,10 +61,6 @@ module.exports = class DB {
         return this.databaseName;
     }
 
-    import() {
-
-    }
-
     async export(collections) {
         let dataToBeExported = {
             dbName: this.databaseName,
@@ -94,6 +90,11 @@ module.exports = class DB {
         console.log(`Exported to: /exports/${fileName}`);
         return fileName;
     }
+
+    import(data, overwrite) {
+        return dbName;
+    }
+
 
     async closeConnection() {
         await this.client.close();

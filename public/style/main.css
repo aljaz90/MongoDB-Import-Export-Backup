@@ -409,4 +409,58 @@ body {
   cursor: pointer;
 }
 
+.import_popup .popup {
+  height: 50rem;
+}
+.import_popup--form--title {
+  font-family: "Open Sans", sans-serif;
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin-bottom: 4rem;
+}
+.import_popup--form--file {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.import_popup--form--file--label {
+  font-family: "Open Sans", sans-serif;
+  font-size: 3.2rem;
+  font-weight: 500;
+  padding: 2.4rem 4.2rem;
+  border: 3px solid #10aa50;
+  border-radius: 8px;
+  color: #10aa50;
+  cursor: pointer;
+  transition: all 0.3s;
+  white-space: nowrap;
+}
+.import_popup--form--file--label:hover {
+  background-color: #f4f4f4;
+}
+.import_popup--form--file--input {
+  display: none;
+}
+.import_popup--form--overwrite {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, calc(-50% + 10rem));
+}
+.import_popup--form--overwrite--label {
+  font-size: 1.6rem;
+  font-weight: 400;
+  margin-right: 2rem;
+  cursor: pointer;
+}
+.import_popup--form--overwrite--input {
+  cursor: pointer;
+}
+.import_popup--form--submit--wrapper {
+  position: absolute;
+  bottom: 3rem;
+  left: 3rem;
+}
+
 /*# sourceMappingURL=main.css.map */

@@ -1,9 +1,10 @@
-const readline = require("readline-sync");
+// const readline = require("readline-sync");
 const fs = require("fs");
 const express = require("express");
 const app = express();
 const open = require("open");
 const bodyParser = require("body-parser");
+const formidable = require("formidable");
 
 const DB = require("./db");
 
@@ -16,7 +17,7 @@ app.use(express.static(__dirname + "/public"));
 app.use(express.static(__dirname + "/exports"));
 
 app.use(bodyParser.urlencoded({extended: true}));
-app.use(bodyParser.json('application/json'));
+app.use(bodyParser.json("application/json"));
 
 app.get("/", async (_, res) => {
     let databases = [];
@@ -113,6 +114,59 @@ app.post("/export", async (req, res) => {
         console.log(error);
         res.status(500).json("An error occured while trying to export collections");
     }
+});
+
+app.post("/import", async (req, res) => {
+    if (!connection) {
+        return res.status(400).send("Not connected to an instance");
+    }
+
+    let files = [];
+    let fields = {};
+    let error = false;
+    let form = new formidable.IncomingForm();
+
+    form.on('file', (field, file) => {
+        files.push(file);
+    });
+    form.on('field', (field, value) => {
+        fields[field] = value;
+    });
+    form.on('error', err => {
+        console.log("An error occured while trying to import database");
+        console.log(err);        
+        error = true;
+        return res.status(500).json("An error occured while trying to import database");
+    });
+    form.on('end', async () => {
+        if (error) {
+            return;
+        }
+
+        if (files.length < 1) {
+            return res.status(400).json("400: Import file not recieved");
+        }
+
+        try {
+            let file = files[0];
+            let extension = file.originalFilename.split('.')[file.originalFilename.split('.').length - 1].toLowerCase();
+            if (!["json"].includes(extension)) {
+                await fs.promises.unlink(file.filepath);
+                return res.status(400).send("400: File type not permitted");
+            }
+
+            let jsonString = await fs.readFileSync(file.filepath);
+            let data = JSON.parse(jsonString);
+
+            let dbName = await connection.import(data, fields["overwriteDatabase"]);            
+        } 
+        catch (err) {
+            console.log("An error occured while trying to import database");
+            console.log(err);
+            res.status(500).json("An error occured while trying to import database");   
+        }
+    });
+    form.parse(req);
 });
 
 app.listen(PORT, () => {
