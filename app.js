@@ -158,7 +158,13 @@ app.post("/import", async (req, res) => {
             let jsonString = await fs.readFileSync(file.filepath);
             let data = JSON.parse(jsonString);
 
-            let dbName = await connection.import(data, fields["overwriteDatabase"]);            
+            let dbName = await connection.import(data, fields["overwriteDatabase"]);
+            let collections = await connection.getCollections();
+
+            res.json({
+                dbName: dbName,
+                collections: collections
+            });
         } 
         catch (err) {
             console.log("An error occured while trying to import database");

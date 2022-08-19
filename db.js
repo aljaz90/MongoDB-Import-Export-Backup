@@ -91,8 +91,29 @@ module.exports = class DB {
         return fileName;
     }
 
-    import(data, overwrite) {
-        return dbName;
+    async import(data, overwrite) {
+        this.selectDatabase(data.dbName);
+
+        for (let collectionData of data.collections) {
+            console.log(`-Importing ${collectionData.name}`);
+            if (collectionData.documents.length < 1) {
+                continue;
+            }
+
+            let collection = this.db.collection(collectionData.name);
+            if (overwrite) {
+                let documentCount = await collection.countDocuments();
+                if (documentCount > 0) {
+                    console.log(`-DeletingMany ${collectionData.name}`);
+                    collection.deleteMany({});
+                }
+            }
+
+            await collection.insertMany(collectionData.documents);
+        }
+
+        console.log("Import successful");
+        return data.dbName;
     }
 
 

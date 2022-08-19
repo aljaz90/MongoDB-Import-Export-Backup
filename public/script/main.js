@@ -174,6 +174,11 @@ function handleSelectFile(e) {
 
 async function handleImport(e) {
     e.preventDefault();
+
+    document.querySelector(".import_popup--form--submit").disabled = true;
+    document.querySelector(".import_popup--form--submit").classList.add("btn-loading");
+
+
     let input = document.querySelector("#importFile");
     let overwriteDatabaseInput = document.querySelector("#overwriteCollections");
 
@@ -185,12 +190,33 @@ async function handleImport(e) {
         let res = await fetch("/import", {
             method: "POST",
             body: data
-        }); 
+        });
+
+        if (res.status !== 200) throw new Error(res.statusText);
+
+        let returnData = await res.json();
+
+        if (returnData.dbName) {
+            database.selectedDbName = returnData.dbName;
+            database.collections = returnData.collections;
+        }
+
+        if (!database.databases.map(el => el.name).includes(returnData.dbName)) {
+            database.databases.push({ name: returnData.dbName, sizeOnDisk: "?"});
+        }
+
+        updateDatabaseList();
+        updateCollectionList();
+        updateActionButtons();
+        handleCloseImportPopup();
     } 
     catch (error) {
-        
+        console.error("An error occured while trying to import database");
+        console.log(error);
     }
 
+    document.querySelector(".import_popup--form--submit").classList.remove("btn-loading");
+    document.querySelector(".import_popup--form--submit").disabled = false;
 }
 
 // Update functions
