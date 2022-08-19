@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node app.js",
     "dev": "npm-run-all --parallel watch:sass start-server",
-    "start-server": "nodemon app.js",
+    "start-server": "nodemon --ignore ./exports/ app.js",
     "watch:sass": "sass sass/main.scss public/style/main.css -w",
     "compile:sass": "sass sass/main.scss public/style/style.comp.css",
     "prefix:css": "postcss --use autoprefixer -b 'last 10 versions' public/style/style.comp.css -o public/style/style.prefix.css",

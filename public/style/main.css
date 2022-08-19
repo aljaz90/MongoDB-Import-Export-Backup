@@ -28,6 +28,14 @@ body {
   grid-template-columns: [full-start] minmax(6rem, 1fr) [center-start] repeat(8, [col-start] minmax(min-content, 14rem) [col-end]) [center-end] minmax(6rem, 1fr) [full-end];
 }
 
+@keyframes loadingAnimation {
+  0% {
+    transform: translate(-50%, -50%) rotate(0);
+  }
+  100% {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
 .btn {
   padding: 1rem 3rem;
   font-size: 1.8rem;
@@ -43,7 +51,6 @@ body {
 .btn:disabled {
   background-color: rgba(16, 170, 80, 0.7);
   cursor: no-drop;
-  position: relative;
 }
 .btn:disabled:hover {
   background-color: rgba(16, 170, 80, 0.7);
@@ -51,32 +58,31 @@ body {
 .btn:disabled:active {
   background-color: rgba(16, 170, 80, 0.7);
 }
-.btn:disabled::after {
-  content: "Select a database";
-  background-color: #333;
-  color: #fff;
-  display: block;
-  position: absolute;
-  top: -1rem;
-  left: 50%;
-  transform: translate(-50%, -100%);
-  white-space: nowrap;
-  font-family: "Nunito", sans-serif;
-  font-size: 1.6rem;
-  font-weight: 600;
-  padding: 0.5rem 1.25rem;
-  border-radius: 4px;
-  transition: all 0.3s;
-  opacity: 0;
-}
-.btn:disabled:hover::after {
-  opacity: 1;
-}
 .btn:hover {
   background-color: #12c15b;
 }
 .btn:active {
   background-color: #14d966;
+}
+.btn-loading {
+  position: relative;
+  background-color: rgba(16, 170, 80, 0.2) !important;
+}
+.btn-loading::after {
+  content: "";
+  width: 2rem;
+  height: 2rem;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 3;
+  background-color: transparent;
+  border-radius: 50%;
+  border: 3px solid #000;
+  border-bottom: 3px solid transparent;
+  animation: loadingAnimation 0.4s linear infinite;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
 }
 
 .input_group {
@@ -334,6 +340,30 @@ body {
 }
 .actions--item:not(:last-child) {
   margin-right: 2rem;
+}
+.actions--item:disabled {
+  position: relative;
+}
+.actions--item:disabled::after {
+  content: "Select a database";
+  background-color: #333;
+  color: #fff;
+  display: block;
+  position: absolute;
+  top: -1rem;
+  left: 50%;
+  transform: translate(-50%, -100%);
+  white-space: nowrap;
+  font-family: "Nunito", sans-serif;
+  font-size: 1.6rem;
+  font-weight: 600;
+  padding: 0.5rem 1.25rem;
+  border-radius: 4px;
+  transition: all 0.3s;
+  opacity: 0;
+}
+.actions--item:disabled:hover::after {
+  opacity: 1;
 }
 
 .export_popup--form--title {

@@ -110,6 +110,8 @@ async function handleExport(e) {
     e.preventDefault();
 
     document.querySelector(".export_popup--form--submit").disabled = true;
+    document.querySelector(".export_popup--form--submit").classList.add("btn-loading");
+
     let collectionsToBeExported = [];
 
     for (let el of e.target.elements) {
@@ -118,7 +120,31 @@ async function handleExport(e) {
         }
     }
 
-    setTimeout(() => document.querySelector(".export_popup--form--submit").disabled = false, 3000);
+    try {
+        const data = {
+            collections: collectionsToBeExported
+        };
+
+        let res = await(await fetch("/export", {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        })).json();
+
+        let a = document.createElement("a");
+        a.href = `/${res.fileName}`;
+        a.download  = res.fileName;
+        a.click();
+    } 
+    catch (error) {
+        console.log("An error occured while trying to export collections");    
+        console.log(error);    
+    }
+    
+    document.querySelector(".export_popup--form--submit").classList.remove("btn-loading");
+    document.querySelector(".export_popup--form--submit").disabled = false;
 }
 
 function handleOpenImportPopup() {

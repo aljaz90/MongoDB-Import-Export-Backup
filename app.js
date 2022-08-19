@@ -13,6 +13,7 @@ let connection = null;
 
 app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public"));
+app.use(express.static(__dirname + "/exports"));
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json('application/json'));
@@ -93,6 +94,24 @@ app.post("/select", async (req, res) => {
     } 
     catch (error) {
         res.status(400).send("An error occured while trying to get collections");
+    }
+});
+
+app.post("/export", async (req, res) => {
+    try {
+        if (!connection || !connection.getSelectedDatabase()) {
+            return res.status(400).send("Not connected to an instance or database is not selected");
+        }
+        
+        let fileName = await connection.export(req.body.collections);
+        res.json({
+            fileName: fileName
+        });
+    } 
+    catch (error) {
+        console.log("An error occured while trying to export collections");
+        console.log(error);
+        res.status(500).json("An error occured while trying to export collections");
     }
 });
 

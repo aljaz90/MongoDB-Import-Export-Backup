@@ -1,4 +1,5 @@
 const { MongoClient } = require("mongodb");
+const fs = require("fs");
 
 module.exports = class DB {
     constructor(url) {
@@ -64,23 +65,23 @@ module.exports = class DB {
 
     }
 
-    async export() {
+    async export(collections) {
         let dataToBeExported = {
             dbName: this.databaseName,
             timestamp: new Date().toISOString(),
             collections: []
         };
-
-        let collections = await this.db.collections();
-        for (let collection of collections) {
-            console.log(`-Exporting ${collection.collectionName}`);
-            const documents = await collection.find({}).toArray();            
+        
+        for (let collectionName of collections) {
+            let collection = await this.db.collection(collectionName);
+            console.log(`-Exporting ${collectionName}`);
+            const documents = await collection.find({}).toArray();
 
             let collectionData = {
                 name: collection.collectionName,
                 documents: documents
             };
-
+    
             dataToBeExported.collections.push(collectionData);
         }
 
@@ -88,8 +89,10 @@ module.exports = class DB {
         let shortDateString = `${currentDate.getUTCFullYear()}-${currentDate.getUTCMonth()}-${currentDate.getUTCDate()}_-${currentDate.getUTCHours()}-${currentDate.getUTCMinutes()}-${currentDate.getUTCSeconds()}`
 
         let data = JSON.stringify(dataToBeExported);
-        await fs.writeFileSync(`./exports/MongoDB-export-${this.databaseName}_${shortDateString}.json`, data);
-        console.log("Export completed");
+        let fileName = `MongoDB-export-${this.databaseName}_${shortDateString}.json`;
+        await fs.writeFileSync(`./exports/${fileName}`, data);
+        console.log(`Exported to: /exports/${fileName}`);
+        return fileName;
     }
 
     async closeConnection() {

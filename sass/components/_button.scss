@@ -1,3 +1,13 @@
+// Loading animation
+@keyframes loadingAnimation {
+    0% {
+        transform: translate(-50%, -50%) rotate(0);
+    }
+    100% {
+        transform: translate(-50%, -50%) rotate(360deg);
+    }
+}
+
 .btn {
     padding: 1rem 3rem;
     font-size: 1.8rem;
@@ -13,7 +23,6 @@
     &:disabled {
         background-color: rgba($color-primary, 0.7);
         cursor: no-drop;
-        position: relative;
 
         &:hover {
             background-color: rgba($color-primary, 0.7);
@@ -21,35 +30,33 @@
         &:active {
             background-color: rgba($color-primary, 0.7);
         }
-
-        &::after {
-            content: "Select a database";
-            background-color: $color-grey-3;
-            color: $color-white;
-            display: block;
-            position: absolute;
-            top: -1rem;
-            left: 50%;
-            transform: translate(-50%, -100%);
-            white-space: nowrap;
-            font-family: $font-primary;
-            font-size: 1.6rem;
-            font-weight: 600;
-            padding: 0.5rem 1.25rem;
-            border-radius: 4px;
-            transition: all .3s;
-            opacity: 0;
-        }
-
-        &:hover::after {
-            opacity: 1;
-        }
     }
-
     &:hover {
         background-color: $color-primary-light;
     }
     &:active {
         background-color: $color-primary-light-2;
+    }
+
+    &-loading {
+        position: relative;
+        background-color: rgba($color-primary, 0.2) !important;
+
+        &::after {
+            content: "";
+            width: 2rem;
+            height: 2rem;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 3;
+            background-color: transparent;
+            border-radius: 50%;
+            border: 3px solid $color-black;
+            border-bottom: 3px solid transparent;
+            animation: loadingAnimation 0.4s linear infinite;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
     }
 }
