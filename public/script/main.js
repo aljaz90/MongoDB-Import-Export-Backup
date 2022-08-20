@@ -32,14 +32,14 @@ async function handleConnect(e) {
         database.databases = resData.connected ? resData.databases : [];
         if (resData.connected) {
             database.databaseUrl = data.databaseUrl;
-            showNotification("Connected to the database instance");
+            showNotification("Connected to the MongoDB instance");
         }
         else {
-            showNotification("Disconnected from the database instance", "warning");
+            showNotification("Disconnected from the MongoDB instance", "warning");
         }
     } 
     catch (error) {
-        showNotification("An error occured while trying to connect to the DB instance", "error");
+        showNotification("An error occured while trying to connect to the MongoDB instance", "error");
         console.error("An error occured while trying to connect to the server");
         console.log(error);
         database.connected = false;
@@ -61,17 +61,21 @@ async function handleSelectDatabase(dbName) {
             dbName: dbName
         };
 
-        let res = await (await fetch("/select", {
+        let res = await fetch("/select", {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
             },
             body: JSON.stringify(data),
-        })).json();
+        });
+
+        if (res.status !== 200) throw new Error(res.statusText);
+
+        let resData = await res.json();
         
-        if (res.collections) {
+        if (resData.collections) {
             database.selectedDbName = dbName;
-            database.collections = res.collections;
+            database.collections = resData.collections;
         }
         else {
             database.selectedDbName = null;
@@ -81,6 +85,7 @@ async function handleSelectDatabase(dbName) {
     catch (error) {
         console.error("An error occured while trying to connect to the server");
         console.log(error);
+        showNotification("An error occured while trying to get database collections", "error");
         database.selectedDbName = null;
         database.collections = [];
     }
@@ -142,22 +147,29 @@ async function handleExport(e) {
             collections: collectionsToBeExported
         };
 
-        let res = await(await fetch("/export", {
+        let res = await fetch("/export", {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
             },
             body: JSON.stringify(data),
-        })).json();
+        });
+        
+        if (res.status !== 200) throw new Error(res.statusText);
+
+        let resData = await res.json();
+
+        showNotification("Database successfully exported");
 
         let a = document.createElement("a");
-        a.href = `/${res.fileName}`;
-        a.download  = res.fileName;
+        a.href = `/${resData.fileName}`;
+        a.download  = resData.fileName;
         a.click();
     } 
     catch (error) {
-        console.log("An error occured while trying to export collections");    
-        console.log(error);    
+        console.log("An error occured while trying to export a database");    
+        console.log(error);
+        showNotification("An error occured while trying to export a database", "error");
     }
     
     document.querySelector(".export_popup--form--submit").classList.remove("btn-loading");
@@ -209,15 +221,15 @@ async function handleImport(e) {
 
         if (res.status !== 200) throw new Error(res.statusText);
 
-        let returnData = await res.json();
+        let resData = await res.json();
 
-        if (returnData.dbName) {
-            database.selectedDbName = returnData.dbName;
-            database.collections = returnData.collections;
+        if (resData.dbName) {
+            database.selectedDbName = resData.dbName;
+            database.collections = resData.collections;
         }
 
-        if (!database.databases.map(el => el.name).includes(returnData.dbName)) {
-            database.databases.push({ name: returnData.dbName, sizeOnDisk: "?"});
+        if (!database.databases.map(el => el.name).includes(resData.dbName)) {
+            database.databases.push({ name: resData.dbName, sizeOnDisk: "?"});
         }
 
         let label = document.querySelector(".import_popup--form--file--label");
@@ -230,10 +242,13 @@ async function handleImport(e) {
         updateCollectionList();
         updateActionButtons();
         handleCloseImportPopup();
+
+        showNotification("Database successfully imported");
     } 
     catch (error) {
         console.error("An error occured while trying to import database");
         console.log(error);
+        showNotification("An error occured while trying to import a database", "error");
     }
 
     document.querySelector(".import_popup--form--submit").classList.remove("btn-loading");
