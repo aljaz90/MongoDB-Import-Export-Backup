@@ -5,6 +5,10 @@ module.exports = class DB {
     constructor(url) {
         this.url = url;
     }
+
+    getUrl() {
+        return this.url;
+    }
     
     async selectDatabase(databaseName) {
         this.databaseName = databaseName;
@@ -20,6 +24,7 @@ module.exports = class DB {
         try {
             this.client = new MongoClient(this.url);
             await this.client.connect();
+
             console.log("Successfully connected to the database");
             return true;
         } 
@@ -105,11 +110,11 @@ module.exports = class DB {
                 let documentCount = await collection.countDocuments();
                 if (documentCount > 0) {
                     console.log(`-DeletingMany ${collectionData.name}`);
-                    collection.deleteMany({});
+                    await collection.deleteMany({});
                 }
             }
 
-            await collection.insertMany(collectionData.documents);
+            await collection.insertMany(collectionData.documents, { ordered: false });
         }
 
         console.log("Import successful");

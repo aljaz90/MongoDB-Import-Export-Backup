@@ -1,5 +1,6 @@
 let database = {
     connected: false,
+    databaseUrl: "",
     databases: [],
     selectedDbName: null,
     collections: []
@@ -23,6 +24,9 @@ async function handleConnect(e) {
 
         database.connected = res.connected;
         database.databases = res.connected ? res.databases : [];
+        if (res.connected) {
+            database.databaseUrl = data.databaseUrl;
+        }
     } 
     catch (error) {
         console.error("An error occured while trying to connect to the server");
@@ -205,6 +209,12 @@ async function handleImport(e) {
             database.databases.push({ name: returnData.dbName, sizeOnDisk: "?"});
         }
 
+        let label = document.querySelector(".import_popup--form--file--label");
+        label.style.fontSize = "3.2rem"
+        label.innerText = "Select file";
+    
+        overwriteDatabaseInput.checked = false;
+
         updateDatabaseList();
         updateCollectionList();
         updateActionButtons();
@@ -225,6 +235,7 @@ function updateConnectionStatus() {
         document.querySelector(".connect--status--text").innerText = "Connected";
         document.querySelector(".connect--status--icon").className = "connect--status--icon connect--status--icon-connected";
         document.querySelector("#urlInput").disabled = true;
+        document.querySelector("#urlInput").value = database.databaseUrl;
         document.querySelector("#connectButton").value = "Disconnect";
         document.querySelector("#connectButton").style.backgroundColor = "#E02626";
     }
