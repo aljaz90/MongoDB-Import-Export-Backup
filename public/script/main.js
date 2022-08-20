@@ -4,7 +4,9 @@ let database = {
     databases: [],
     selectedDbName: null,
     collections: []
-}
+};
+
+let notification = null;
 
 async function handleConnect(e) {
     e.preventDefault();
@@ -14,21 +16,30 @@ async function handleConnect(e) {
             databaseUrl: e.target.elements.url.value
         };
 
-        let res = await (await fetch("/connect", {
+        let res = await fetch("/connect", {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
             },
             body: JSON.stringify(data),
-        })).json();
+        });
 
-        database.connected = res.connected;
-        database.databases = res.connected ? res.databases : [];
-        if (res.connected) {
+        let resData = await res.json();
+
+        if (res.status !== 200) throw new Error(res.statusText);
+
+        database.connected = resData.connected;
+        database.databases = resData.connected ? resData.databases : [];
+        if (resData.connected) {
             database.databaseUrl = data.databaseUrl;
+            showNotification("Connected to the database instance");
+        }
+        else {
+            showNotification("Disconnected from the database instance", "warning");
         }
     } 
     catch (error) {
+        showNotification("An error occured while trying to connect to the DB instance", "error");
         console.error("An error occured while trying to connect to the server");
         console.log(error);
         database.connected = false;
@@ -335,4 +346,48 @@ function updateCollectionList() {
 
         collectionList.appendChild(item);
     }
+}
+
+function handleCloseNotification() {
+    if (notification) {
+        let notificationWrapper = document.querySelector(".notification--wrapper");
+        let notificationProgress = document.querySelector(".notification--progress");
+
+        notificationWrapper.classList.remove("notification--wrapper-animation-show");
+        notificationWrapper.classList.add("notification--wrapper-animation-hide");
+        notificationWrapper.style.transform = "translateY(calc(100% + 4rem))";
+
+        notificationProgress.classList.remove("notification--progress-animation");
+        
+        clearTimeout(notification);
+        notification = null;
+    }
+}
+
+function showNotification(text, type) {
+    if (notification) {
+        setTimeout(() => showNotification(text, type), 1000);
+        return;
+    }
+
+    let notificationElement = document.querySelector(".notification");
+    let notificationWrapper = document.querySelector(".notification--wrapper");
+    let notificationProgress = document.querySelector(".notification--progress");
+    let notificationText = document.querySelector(".notification--text");
+
+    notificationElement.classList.remove("notification-error");
+    notificationElement.classList.remove("notification-warning");
+    notificationWrapper.classList.remove("notification--wrapper-animation-hide");
+    
+    notificationText.innerText = text;
+
+    if (type === "error" || type === "warning") {
+        notificationElement.classList.add(`notification-${type}`);
+    }
+
+    notificationWrapper.classList.add("notification--wrapper-animation-show");
+    notificationWrapper.style.transform = "translateY(0)";
+    notificationProgress.classList.add("notification--progress-animation");
+
+    notification = setTimeout(handleCloseNotification, 4000);
 }
