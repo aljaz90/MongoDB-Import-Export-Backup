@@ -178,5 +178,5 @@ app.post("/import", async (req, res) => {
 
 app.listen(PORT, () => {
     console.log(`Serving dashboard at: http://localhost:${PORT}`);
-    // open(`http://localhost:${PORT}`);
+    open(`http://localhost:${PORT}`);
 });
