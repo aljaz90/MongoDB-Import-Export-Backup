@@ -1,5 +1,5 @@
 {
-  "name": "mongodb-import-export-backup",
+  "name": "mongodb-transporter",
   "version": "1.0.0",
   "description": "Export, import, and backup collections from a MongoDB database",
   "main": "app.js",
@@ -16,14 +16,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/aljaz90/MongoDB-Import-Export-Backup.git"
+    "url": "git+https://github.com/aljaz90/MongoDB-Transporter.git"
   },
   "author": "Aljaz Kern",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/aljaz90/MongoDB-Import-Export-Backup/issues"
+    "url": "https://github.com/aljaz90/MongoDB-Transporter/issues"
   },
-  "homepage": "https://github.com/aljaz90/MongoDB-Import-Export-Backup#readme",
+  "homepage": "https://github.com/aljaz90/MongoDB-Transporter#readme",
   "dependencies": {
     "autoprefixer": "^10.4.8",
     "body-parser": "^1.20.0",
