@@ -91,6 +91,11 @@ module.exports = class DB {
 
         let data = JSON.stringify(dataToBeExported);
         let fileName = `MongoDB-export-${this.databaseName}_${shortDateString}.json`;
+
+        if (!fs.existsSync("./exports")) {
+            fs.mkdirSync("./exports");
+        }
+
         await fs.writeFileSync(`./exports/${fileName}`, data);
         console.log(`Exported to: /exports/${fileName}`);
         return fileName;
