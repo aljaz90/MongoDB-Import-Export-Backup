@@ -134,12 +134,12 @@ app.post("/import", async (req, res) => {
         fields[field] = value;
     });
     form.on('error', err => {
-        console.log("An error occured while trying to import database");
+        console.log("An error occured while trying parse form data");
         console.log(err);        
         error = true;
         return res.status(500).json("An error occured while trying to import database");
     });
-    form.on('end', async () => {
+    form.once('end', async () => {
         if (error) {
             return;
         }
