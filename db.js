@@ -1,9 +1,40 @@
-const { MongoClient } = require("mongodb");
+const { MongoClient, ObjectId } = require("mongodb");
 const fs = require("fs");
 
 module.exports = class DB {
     constructor(url) {
         this.url = url;
+    }
+
+    #addTypes(documents) {
+        let typedDocuments = [];
+
+        for (let doc of documents) {
+            let typedDoc = {};
+            for (const [key, value] of Object.entries(doc)) {
+                if (value instanceof ObjectId) {
+                    typedDoc[key] = `O${value}`;
+                }
+                else if (value instanceof Date) {
+                    typedDoc[key] = `D${value}`;
+                }
+                else if (typeof value === "string") {
+                    typedDoc[key] = `S${value}`;
+                }
+                else if (Array.isArray(value)) {
+                    // TODO
+                }
+                else if (typeof value === "object") {
+                    // TODO
+                }
+                else {
+                    typedDoc[key] = value;
+                }
+            }
+            typedDocuments.push(typedDocuments);
+        }
+
+        return typedDocuments;
     }
 
     getUrl() {
@@ -67,6 +98,8 @@ module.exports = class DB {
     }
 
     async export(collections) {
+        throw "Not yet properly implemented";
+
         let dataToBeExported = {
             dbName: this.databaseName,
             timestamp: new Date().toISOString(),
@@ -80,7 +113,7 @@ module.exports = class DB {
 
             let collectionData = {
                 name: collection.collectionName,
-                documents: documents
+                documents: this.#addTypes(documents)
             };
     
             dataToBeExported.collections.push(collectionData);
@@ -97,11 +130,11 @@ module.exports = class DB {
         }
 
         await fs.writeFileSync(`./exports/${fileName}`, data);
-        console.log(`Exported to: /exports/${fileName}`);
+        console.log(`Exported to: ./exports/${fileName}`);
         return fileName;
     }
 
-    async import(data, overwrite) {
+    async import(data, overwrite) {        
         this.selectDatabase(data.dbName);
 
         for (let collectionData of data.collections) {
