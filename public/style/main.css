@@ -453,6 +453,22 @@ body {
   opacity: 1;
 }
 
+.export_popup--form--options {
+  display: flex;
+  margin-bottom: 4rem;
+}
+.export_popup--form--options--label {
+  font-family: "Open Sans", sans-serif;
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin-right: 5rem;
+  cursor: pointer;
+  border-left: 8px solid #12c15b;
+  padding-left: 1rem;
+}
+.export_popup--form--options--input {
+  cursor: pointer;
+}
 .export_popup--form--header {
   display: flex;
   align-items: center;
@@ -475,10 +491,11 @@ body {
 .export_popup--form--collection_list {
   display: flex;
   flex-direction: column;
-  height: 57rem;
-  max-height: 57rem;
+  height: 51rem;
+  max-height: 51rem;
   overflow-y: auto;
   margin-bottom: 1rem;
+  border: 2px solid #eee;
 }
 .export_popup--form--collection_list--item {
   font-size: 1.8rem;

@@ -100,6 +100,9 @@ function handleOpenExportPopup() {
     let popup = document.querySelector(".export_popup");
     let popupCollectionList = document.querySelector(".export_popup--form--collection_list");
     let selectAllBtn = document.querySelector("#select-all-btn");
+    let exportIndexesCheckbox = document.querySelector("#exportIndexes");
+
+    exportIndexesCheckbox.checked = true;
     selectAllBtn.innerText = "Unselect all";
     collectionCheckboxes = [];
     popupCollectionList.replaceChildren();
@@ -167,7 +170,8 @@ async function handleExport(e) {
 
     try {
         const data = {
-            collections: collectionsToBeExported
+            collections: collectionsToBeExported,
+            exportIndexes: e.target.exportIndexes.checked
         };
 
         let res = await fetch("/export", {

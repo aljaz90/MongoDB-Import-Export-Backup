@@ -105,7 +105,7 @@ app.post("/export", async (req, res) => {
             return res.status(400).send("Not connected to an instance or database is not selected");
         }
         
-        let fileName = await connection.export(req.body.collections);
+        let fileName = await connection.export(req.body.collections, req.body.exportIndexes);
         res.json({
             fileName: fileName
         });

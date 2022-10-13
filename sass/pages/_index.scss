@@ -242,6 +242,25 @@
 
 .export_popup {
     &--form {
+
+        &--options {
+            display: flex;
+            margin-bottom: 4rem;
+
+            &--label {
+                font-family: $font-heading;
+                font-size: 1.8rem;
+                font-weight: 600;
+                margin-right: 5rem;
+                cursor: pointer;
+                border-left: 8px solid $color-primary-light;
+                padding-left: 1rem;
+            }
+            &--input {
+                cursor: pointer;
+            }
+        }
+
         &--header {
             display: flex;
             align-items: center;
@@ -268,10 +287,11 @@
         &--collection_list {
             display: flex;
             flex-direction: column;
-            height: 57rem;
-            max-height: 57rem;
+            height: 51rem;
+            max-height: 51rem;
             overflow-y: auto;
             margin-bottom: 1rem;
+            border: 2px solid $color-grey;
 
             &--item {
                 font-size: 1.8rem;
