@@ -63,7 +63,7 @@ module.exports = class DB {
         return this.url;
     }
     
-    async selectDatabase(databaseName) {
+    selectDatabase(databaseName) {
         this.databaseName = databaseName;
         if (databaseName) {
             this.db = this.client.db(this.databaseName);
@@ -119,7 +119,7 @@ module.exports = class DB {
         return this.databaseName;
     }
 
-    async export(collections) {
+    async export(collections, exportIndexes=true) {
         let dataToBeExported = {
             dbName: this.databaseName,
             timestamp: new Date().toISOString(),
@@ -133,9 +133,15 @@ module.exports = class DB {
 
             let serializedDocuments = this.#serializeTypes(documents);
 
+            let indexes = [];
+            if (exportIndexes) {
+                indexes = await collection.indexes();
+            }
+
             let collectionData = {
                 name: collection.collectionName,
-                documents: serializedDocuments
+                documents: serializedDocuments,
+                indexes: indexes
             };
     
             dataToBeExported.collections.push(collectionData);
@@ -158,14 +164,17 @@ module.exports = class DB {
 
     async import(data, overwrite) {        
         this.selectDatabase(data.dbName);
+        let existingCollections = await this.getCollections();
+        let collectionNames = existingCollections.map(el => el.name);
 
         for (let collectionData of data.collections) {
             console.log(`-Importing ${collectionData.name}`);
-            if (collectionData.documents.length < 1) {
-                continue;
-            }
 
             let collection = this.db.collection(collectionData.name);
+            if (!collectionNames.includes(collectionData.name)) {
+                collection = await this.db.createCollection(collectionData.name);
+            }
+
             if (overwrite) {
                 let documentCount = await collection.countDocuments();
                 if (documentCount > 0) {
@@ -174,9 +183,16 @@ module.exports = class DB {
                 }
             }
 
-            let typedDocuments = this.#deserializeTypes(collectionData.documents);
+            if (collectionData.indexes.length > 0) {
+                await collection.createIndexes(collectionData.indexes);
+            }
 
-            await collection.insertMany(typedDocuments, { ordered: false });
+            if (collectionData.documents.length > 0) {
+                let typedDocuments = this.#deserializeTypes(collectionData.documents);
+                await collection.insertMany(typedDocuments, { ordered: false });
+            }
+
+
         }
 
         console.log("Import successful");

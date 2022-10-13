@@ -115,6 +115,8 @@
     grid-row: 4 / 8;
     grid-column: center-start / 6;
     padding-top: 6rem;
+    max-height: 60vh;
+    overflow-y: auto;
 
     &--list {
         display: flex;
