@@ -242,11 +242,27 @@
 
 .export_popup {
     &--form {
-        &--title {
-            font-family: $font-heading;
-            font-size: 1.8rem;
-            font-weight: 600;
+        &--header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
             margin-bottom: 2rem;
+
+            &--title {
+                font-family: $font-heading;
+                font-size: 1.8rem;
+                font-weight: 600;
+            }
+
+            &--select_all {
+                background-color: $color-info;
+                padding: 0.75rem 1.75rem;
+                font-size: 1.6rem;
+                
+                &:hover {
+                    background-color: lighten($color-info, 5%);
+                }
+            }
         }
 
         &--collection_list {

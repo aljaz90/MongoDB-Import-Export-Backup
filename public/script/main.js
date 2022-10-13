@@ -7,6 +7,7 @@ let database = {
 };
 
 let notification = null;
+let collectionCheckboxes = [];
 
 async function handleConnect(e) {
     e.preventDefault();
@@ -98,6 +99,9 @@ async function handleSelectDatabase(dbName) {
 function handleOpenExportPopup() {
     let popup = document.querySelector(".export_popup");
     let popupCollectionList = document.querySelector(".export_popup--form--collection_list");
+    let selectAllBtn = document.querySelector("#select-all-btn");
+    selectAllBtn.innerText = "Unselect all";
+    collectionCheckboxes = [];
     popupCollectionList.replaceChildren();
 
     for (let collection of database.collections) {
@@ -110,6 +114,9 @@ function handleOpenExportPopup() {
         input.id = `${collection.name}Collection`;
         input.value = collection.name;
         input.checked = true;
+        input.onchange = handleCollectionSelect;
+        collectionCheckboxes.push(input);
+
         item.appendChild(input);
 
         let label = document.createElement("label");
@@ -128,19 +135,35 @@ function handleCloseExportPopup() {
     popup.style.display = "none";
 }
 
+function handleCollectionSelect(e) {
+    let selectAllBtn = document.querySelector("#select-all-btn");
+    if (!e.target.checked) {
+        selectAllBtn.innerText = "Select all";
+    }
+    else {
+        let allChecked = collectionCheckboxes.map(el => el.checked).every(el => el);
+        if (allChecked) {
+            selectAllBtn.innerText = "Unselect all";
+        }
+    }
+}
+
+function toggleSelectAll(e) {
+    let selecting = e.target.innerText === "Select all";
+    for (let checkbox of collectionCheckboxes) {
+        checkbox.checked = selecting;
+    }
+
+    e.target.innerText = selecting ? "Unselect all" : "Select all";
+}
+
 async function handleExport(e) {
     e.preventDefault();
 
     document.querySelector(".export_popup--form--submit").disabled = true;
     document.querySelector(".export_popup--form--submit").classList.add("btn-loading");
 
-    let collectionsToBeExported = [];
-
-    for (let el of e.target.elements) {
-        if (el.type === "checkbox" && el.checked) {
-            collectionsToBeExported.push(el.value);
-        }
-    }
+    let collectionsToBeExported = collectionCheckboxes.filter(el => el.checked).map(el => el.value);
 
     try {
         const data = {

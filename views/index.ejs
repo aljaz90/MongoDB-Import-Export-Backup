@@ -60,8 +60,13 @@
         </div>
         <div class="popup--body">
             <form onsubmit="handleExport(event)" class="export_popup--form" action="#">
-                <div class="export_popup--form--title">
-                    Select collections you want to export
+                <div class="export_popup--form--header">
+                    <div class="export_popup--form--header--title">
+                        Select collections you want to export
+                    </div>
+                    <button type="button" onclick="toggleSelectAll(event)" id="select-all-btn" class="btn export_popup--form--header--select_all">
+                        Unselect all
+                    </button>
                 </div>
                 <div class="export_popup--form--collection_list">
                 </div>
