@@ -6,35 +6,57 @@ module.exports = class DB {
         this.url = url;
     }
 
-    #addTypes(documents) {
-        let typedDocuments = [];
+    #serializeTypes(document) {
+        let typedDoc = Array.isArray(document) ? [] : {};
 
-        for (let doc of documents) {
-            let typedDoc = {};
-            for (const [key, value] of Object.entries(doc)) {
-                if (value instanceof ObjectId) {
-                    typedDoc[key] = `O${value}`;
-                }
-                else if (value instanceof Date) {
-                    typedDoc[key] = `D${value}`;
-                }
-                else if (typeof value === "string") {
-                    typedDoc[key] = `S${value}`;
-                }
-                else if (Array.isArray(value)) {
-                    // TODO
-                }
-                else if (typeof value === "object") {
-                    // TODO
-                }
-                else {
-                    typedDoc[key] = value;
-                }
+        for (const [key, value] of Object.entries(document)) {
+            if (value instanceof ObjectId) {
+                typedDoc[key] = `O${value}`;
             }
-            typedDocuments.push(typedDocuments);
+            else if (value instanceof Date) {
+                typedDoc[key] = `D${value}`;
+            }
+            else if (typeof value === "string") {
+                typedDoc[key] = `S${value}`;
+            }
+            else if (value && (Array.isArray(value) || typeof value === "object")) {
+                typedDoc[key] = this.#serializeTypes(value);
+            }
+            else {
+                typedDoc[key] = value;
+            }
         }
 
-        return typedDocuments;
+        return typedDoc;
+    }
+
+    #deserializeTypes(document) {
+        let newDoc = Array.isArray(document) ? [] : {};
+
+        for (const [key, value] of Object.entries(document)) {
+            if (typeof value === "string") {
+                let type = value[0];
+                let val = value.slice(1);
+
+                if (type === "S") {
+                    newDoc[key] = val;
+                }
+                else if (type === "D") {
+                    newDoc[key] = new Date(val);
+                }
+                else if (type === "O") {
+                    newDoc[key] = new ObjectId(val);
+                }
+            }
+            else if (value && (Array.isArray(value) || typeof value === "object")) {
+                newDoc[key] = this.#deserializeTypes(value);
+            }
+            else {
+                newDoc[key] = value;
+            }
+        }
+
+        return newDoc;
     }
 
     getUrl() {
@@ -98,8 +120,6 @@ module.exports = class DB {
     }
 
     async export(collections) {
-        throw "Not yet properly implemented";
-
         let dataToBeExported = {
             dbName: this.databaseName,
             timestamp: new Date().toISOString(),
@@ -111,16 +131,18 @@ module.exports = class DB {
             console.log(`-Exporting ${collectionName}`);
             const documents = await collection.find({}).toArray();
 
+            let serializedDocuments = this.#serializeTypes(documents);
+
             let collectionData = {
                 name: collection.collectionName,
-                documents: this.#addTypes(documents)
+                documents: serializedDocuments
             };
     
             dataToBeExported.collections.push(collectionData);
         }
 
         let currentDate = new Date();
-        let shortDateString = `${currentDate.getUTCFullYear()}-${currentDate.getUTCMonth()}-${currentDate.getUTCDate()}_-${currentDate.getUTCHours()}-${currentDate.getUTCMinutes()}-${currentDate.getUTCSeconds()}`
+        let shortDateString = `${currentDate.getUTCFullYear()}-${currentDate.getUTCMonth()}-${currentDate.getUTCDate()}_-${currentDate.getUTCHours()}-${currentDate.getUTCMinutes()}-${currentDate.getUTCSeconds()}`;
 
         let data = JSON.stringify(dataToBeExported);
         let fileName = `MongoDB-export-${this.databaseName}_${shortDateString}.json`;
@@ -152,7 +174,9 @@ module.exports = class DB {
                 }
             }
 
-            await collection.insertMany(collectionData.documents, { ordered: false });
+            let typedDocuments = this.#deserializeTypes(collectionData.documents);
+
+            await collection.insertMany(typedDocuments, { ordered: false });
         }
 
         console.log("Import successful");
